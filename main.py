@@ -1,10 +1,20 @@
+from functools import wraps
+
 from flask import Flask, redirect, render_template
-from flask_login import LoginManager, login_user, logout_user
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
 from data import db_session
 from data.news import News
 from data.users import User
 from forms.user import LoginForm, RegisterForm
+
+def unregistered_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.is_authenticated:
+            return redirect('/success')
+        return f(*args, **kwargs)
+    return decorated_function
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'
@@ -24,6 +34,7 @@ def start():
     return redirect('/login')
 
 @app.route('/login', methods=['GET', 'POST'])
+@unregistered_required
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -35,12 +46,8 @@ def login():
         return render_template('login.html', message="Incorrect login or password", form=form)
     return render_template('login.html', title='Authorisation', form=form)
 
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect('/login')
-
 @app.route('/register', methods=['GET', 'POST'])
+@unregistered_required
 def reqister():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -57,10 +64,15 @@ def reqister():
     return render_template('register.html', title='Registration', form=form)
 
 @app.route('/success')
+@login_required
 def success():
-    db_sess = db_session.create_session()
-    news = db_sess.query(News).filter(News.is_private != True)
-    return render_template("success.html", news=news)
+    return render_template("success.html")
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/login')
 
 
 if __name__ == '__main__':
