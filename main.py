@@ -22,7 +22,7 @@ app.config['SECRET_KEY'] = 'secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-db_session.global_init("db/blogs.db")
+db_session.global_init("db/users.db")
 
 @login_manager.user_loader
 def load_user(user_id):
