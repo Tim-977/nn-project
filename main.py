@@ -84,7 +84,7 @@ def reqister():
     form = RegisterForm()
     if form.validate_on_submit():
         if not email_check(form.email.data):
-            return render_template('register.html', form=form, message='Ivalid email adress')
+            return render_template('register.html', form=form, message='Invalid email adress')
         if form.password.data != form.password_again.data:
             return render_template('register.html', form=form, message="Passwords don't match")
         if password_check(form.password.data) != "Password is strong":
