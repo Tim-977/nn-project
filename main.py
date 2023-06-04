@@ -39,8 +39,8 @@ def password_check(password):
 def email_check(email):
     if '@' in email and '.' in email:
         at_index = email.index('@')
-        dot_index = email.rindex('.')
-        if at_index < dot_index - 1:
+        dot_index = email.index('.')
+        if at_index < dot_index - 1 and email and email[-1] != '.':
             return True
     return False
 
