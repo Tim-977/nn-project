@@ -18,6 +18,19 @@ def unregistered_required(f):
 
     return decorated_function
 
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == kwargs.get('user_id')).first()
+        #print(user, not not user)
+        #print(user.admin, not not user.admin)
+        if not user.admin: #FIXME
+            return redirect('/notadmin')
+        return f(*args, **kwargs)
+
+    return decorated_function
+
 def password_check(password):
     if len(password) < 8:
         return "Password is too short. It should be at least 8 characters long."
@@ -105,6 +118,17 @@ def reqister():
 @login_required
 def success():
     return render_template("success.html")
+
+
+@app.route('/admin')
+@admin_required
+def admin_page():
+    return "<h1>ADMIN!!!!!!</h1>"
+
+
+@app.route('/notadmin')
+def notadmin_page():
+    return "<h1>YOU ARE NOT ADMIN!!!!!!</h1>"
 
 
 @app.route('/logout')
