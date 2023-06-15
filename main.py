@@ -6,7 +6,7 @@ from flask_login import LoginManager, login_required, login_user, logout_user, c
 import hashing
 from data import db_session
 from data.users import User
-from forms.user import LoginForm, RegisterForm
+from forms.user import LoginForm, RegisterForm, EditForm
 
 
 def unregistered_required(f):
@@ -22,10 +22,8 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.id == kwargs.get('user_id')).first()
-        #print(user, not not user)
-        #print(user.admin, not not user.admin)
-        if not user.admin: #FIXME
+        user = db_sess.query(User).filter(User.id == current_user.id, User.name == current_user.name).first()
+        if not user.admin:
             return redirect('/notadmin')
         return f(*args, **kwargs)
 
@@ -114,6 +112,25 @@ def reqister():
     return render_template('register.html', title='Registration', form=form)
 
 
+@app.route('/adduser',  methods=['GET', 'POST'])
+@admin_required
+@login_required
+def add_news():
+    form = EditForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = User()
+        user.name = form.name.data
+        user.email = form.email.data
+        user.hashed_password = form.hashed_password.data
+        user.admin = form.admin.data
+        user.archived = form.archived.data
+        db_sess.add(user)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('add.html', title='Add user', form=form)
+
+
 @app.route('/success')
 @login_required
 def success():
@@ -123,12 +140,14 @@ def success():
 @app.route('/admin')
 @admin_required
 def admin_page():
-    return "<h1>ADMIN!!!!!!</h1>"
+    db_sess = db_session.create_session()
+    users = db_sess.query(User)
+    return render_template("admin.html", users=users)
 
 
 @app.route('/notadmin')
 def notadmin_page():
-    return "<h1>YOU ARE NOT ADMIN!!!!!!</h1>"
+    return render_template("notadmin.html")
 
 
 @app.route('/logout')

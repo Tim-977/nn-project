@@ -16,3 +16,13 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember me')
     submit = SubmitField('Log in')
+
+
+class EditForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    email = StringField("Email", validators=[DataRequired()])
+    hashed_password = StringField("Password", validators=[DataRequired()])
+    created_date = StringField('Created Date', validators=[DataRequired()])
+    admin = BooleanField("Admin")
+    archived = BooleanField("Archived")
+    submit = SubmitField('Submit')

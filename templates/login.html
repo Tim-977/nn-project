@@ -8,7 +8,7 @@
             {{ form.email.label }}<br>
             {{ form.email(class="form-control", type="email") }}<br>
             {% for error in form.email.errors %}
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-warning" role="alert">
                     {{ error }}
                 </div>
             {% endfor %}
@@ -17,7 +17,7 @@
             {{ form.password.label }}<br>
             {{ form.password(class="form-control", type="password") }}<br>
             {% for error in form.password.errors %}
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-warning" role="alert">
                     {{ error }}
                 </div>
             {% endfor %}
@@ -25,7 +25,7 @@
         <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
         <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
         {% if message %}
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-warning" role="alert">
             {{ message }}
         </div>
         {% endif %}

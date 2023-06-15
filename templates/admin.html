@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br>
+<h1>Admin Page</h1>
+<br>
+<div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Hashed Password</th>
+          <th>Created date</th>
+          <th>Admin</th>
+          <th>Archived</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in users%}
+        <tr>
+          <td>{{ item.name }}</td>
+          <td>{{ item.email }}</td>
+          <td>PASSWORD</td>
+          <td>{{ item.created_date }}</td>
+          <td>{{ item.admin }}</td>
+          <td>{{ item.archived }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
