@@ -8,6 +8,13 @@ from data import db_session
 from data.users import User
 from forms.user import LoginForm, RegisterForm, EditForm
 
+#TODO:
+#    ~ Admin required into new routes
+#    ~ Fix frontend
+#    ~ Check usual user access
+# ------------------------------------
+#    ~ Archive users
+#    ~ Clear code snippets
 
 def unregistered_required(f):
     @wraps(f)
@@ -113,8 +120,8 @@ def reqister():
 
 
 @app.route('/adduser',  methods=['GET', 'POST'])
-@admin_required
 @login_required
+@admin_required
 def add_news():
     form = EditForm()
     if form.validate_on_submit():
@@ -138,6 +145,7 @@ def success():
 
 
 @app.route('/admin')
+@login_required
 @admin_required
 def admin_page():
     db_sess = db_session.create_session()
