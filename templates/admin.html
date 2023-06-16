@@ -18,14 +18,14 @@
       </thead>
       <tbody>
         {% for item in users%}
-        <tr>
-          <td>{{ item.name }}</td>
-          <td>{{ item.email }}</td>
-          <td>PASSWORD</td>
-          <td>{{ item.created_date }}</td>
-          <td>{{ item.admin }}</td>
-          <td>{{ item.archived }}</td>
-        </tr>
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.email }}</td>
+            <td>PASSWORD</td>
+            <td>{{ item.created_date }}</td>
+            <td>{{ item.admin }}</td>
+            <td>{{ item.archived }}</td>
+          </tr>
         {% endfor %}
       </tbody>
     </table>

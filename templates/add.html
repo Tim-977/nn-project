@@ -33,8 +33,8 @@
             </p>
         {% endfor %}
     </p>
-    <p>{{ form.admin() }} {{ form.admin.label }}</p>
-    <p>{{ form.archived() }} {{ form.archived.label }}</p>
+    <p>{{ form.is_admin() }} {{ form.is_admin.label }}</p>
+    <p>{{ form.is_archived() }} {{ form.is_archived.label }}</p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{message}}
 </form>

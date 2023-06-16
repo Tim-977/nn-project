@@ -39,5 +39,4 @@ def myhash(s):
 
     for i in range(1, 100):
         result += str(mainalg(s, i))
-    
     return result

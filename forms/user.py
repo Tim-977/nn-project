@@ -18,11 +18,11 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Log in')
 
 
-class EditForm(FlaskForm):
+class AddForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
     hashed_password = StringField("Password", validators=[DataRequired()])
     created_date = StringField('Created Date', validators=[DataRequired()])
-    admin = BooleanField("Admin")
-    archived = BooleanField("Archived")
+    is_admin = BooleanField("Admin")
+    is_archived = BooleanField("Archived")
     submit = SubmitField('Submit')
