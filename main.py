@@ -34,8 +34,8 @@ def start():
     return redirect('/login')
 
 
-@unregistered_required
 @app.route('/login', methods=['GET', 'POST'])
+@unregistered_required
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -48,8 +48,8 @@ def login():
     return render_template('login.html', title='Authorisation', form=form)
 
 
-@unregistered_required
 @app.route('/register', methods=['GET', 'POST'])
+@unregistered_required
 def reqister():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -70,9 +70,10 @@ def reqister():
     return render_template('register.html', title='Registration', form=form)
 
 
+
+@app.route('/adduser', methods=['GET', 'POST'])
 @login_required
 @admin_required
-@app.route('/adduser', methods=['GET', 'POST'])
 def add_user():
     form = AddForm()
     if form.validate_on_submit():
@@ -89,15 +90,15 @@ def add_user():
     return render_template('add.html', title='Add user', form=form)
 
 
-@login_required
 @app.route('/success')
+@login_required
 def success():
     return render_template('success.html')
 
 
+@app.route('/admin')
 @login_required
 @admin_required
-@app.route('/admin')
 def admin_page():
     db_sess = db_session.create_session()
     users = db_sess.query(User)
@@ -109,8 +110,8 @@ def notadmin_page():
     return render_template('notadmin.html')
 
 
-@login_required
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect('/login')
