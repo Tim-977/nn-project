@@ -77,6 +77,7 @@ def reqister():
 def add_user():
     form = AddForm()
     if form.validate_on_submit():
+        print('validated on submit')
         db_sess = db_session.create_session()
         user = User()
         user.name = form.name.data
@@ -86,7 +87,8 @@ def add_user():
         user.archived = form.archived.data
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/')
+        return redirect('/success')
+    print('passed through the function')
     return render_template('add.html', title='Add user', form=form)
 
 

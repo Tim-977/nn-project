@@ -1,5 +1,11 @@
 from functools import wraps
 
+from flask import redirect
+from flask_login import current_user
+
+from data import db_session
+from data.users import User
+
 
 def unregistered_required(f):
     @wraps(f)
