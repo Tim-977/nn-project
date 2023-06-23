@@ -12,9 +12,11 @@
         <th>Email</th>
         <th>Hashed Password</th>
         <th>Created date</th>
-        <th>Admin</th>
         <th>Archived</th>
+        <th>Admin</th>
         <th></th>
+        <th></th>
+        <td></td>
       </tr>
     </thead>
     <tbody>
@@ -24,15 +26,26 @@
           <td>{{ item.email }}</td>
           <td>PASSWORD</td>
           <td>{{ item.created_date }}</td>
-          <td>{{ item.admin }}</td>
           <td>{{ item.archived }}</td>
+          <td>{{ item.admin }}</td>
           <td>
             <div>
-              <a href="/edituser/{{ item.id }}" class="btn btn-warning">
+              <a href="/edituser/{{ item.id }}" class="btn btn-success">
                 Edit
               </a>
-              <a href="/archiveuser/{{ item.id }}" class="btn btn-danger">
+            </div>
+          </td>
+          <td>
+            <div>
+              <a href="/archiveuser/{{ item.id }}" class="btn btn-warning">
                 Archive
+              </a>
+            </div>
+          </td>
+          <td>
+            <div>
+              <a href="/adminuser/{{ item.id }}" class="btn btn-danger">
+                Admin
               </a>
             </div>
           </td>

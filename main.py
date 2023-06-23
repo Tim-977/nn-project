@@ -8,8 +8,6 @@ from forms.user import AddForm, LoginForm, RegisterForm, EditForm
 from utils import *
 
 # TODO:
-#    ~ Fix frontend
-#    ~ Clear code snippets
 #    ~ Add admin_required
 
 app = Flask(__name__)
@@ -129,6 +127,19 @@ def archive_user(id):
         abort(404)
     return redirect('/admin')
 
+
+@app.route('/adminuser/<int:id>', methods=['GET', 'POST'])
+@login_required
+def admin_user(id):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == id).first()
+    if user:
+        user.admin = True if not user.admin else False
+        db_sess.commit()
+    else:
+        print('NO USER', form.errors)
+        abort(404)
+    return redirect('/admin')
 
 
 @app.route('/admin')
