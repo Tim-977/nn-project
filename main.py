@@ -1,17 +1,14 @@
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, request
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 
 import hashing
 from data import db_session
 from data.users import User
-from forms.user import AddForm, LoginForm, RegisterForm
+from forms.user import AddForm, LoginForm, RegisterForm, EditForm
 from utils import *
 
 # TODO:
 #    ~ Fix frontend
-#    ~ Check usual user access
-# ------------------------------------
-#    ~ Archive users
 #    ~ Clear code snippets
 
 app = Flask(__name__)
@@ -93,11 +90,35 @@ def add_user():
     return render_template('add.html', title='Add user', form=form)
 
 
-@app.route('/success')
+@app.route('/admin/<int:id>', methods=['GET', 'POST'])
 @login_required
-@unarchived_required
-def success():
-    return render_template('success.html')
+def edit_user(id):
+    form = EditForm()
+    if request.method == "GET":
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == id).first()
+        if user:
+            form.name.data = user.name
+            form.email.data = user.email
+            form.hashed_password.data = 'PASSWORD'
+            # form.is_admin.data = user.admin
+            # form.is_archived.data = user.archived
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == id).first()
+        if news:
+            user.name = form.name.data
+            user.email = form.email.data
+            user.hashed_password = hashing.myhash(form.hashed_password.data)
+            # user.admin = form.is_admin.data
+            # user.archived = form.is_archived.data
+            db_sess.commit()
+            return redirect('/')
+        else:
+            abort(404)
+    return render_template('admin.html', title='User change', form=form)
 
 
 @app.route('/admin')
@@ -108,6 +129,13 @@ def admin_page():
     db_sess = db_session.create_session()
     users = db_sess.query(User)
     return render_template('admin.html', users=users)
+
+
+@app.route('/success')
+@login_required
+@unarchived_required
+def success():
+    return render_template('success.html')
 
 
 @app.route('/notadmin')

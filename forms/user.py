@@ -25,3 +25,12 @@ class AddForm(FlaskForm):
     is_admin = BooleanField("Admin")
     is_archived = BooleanField("Archived")
     submit = SubmitField('Submit')
+
+
+class EditForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    email = StringField("Email", validators=[DataRequired()])
+    hashed_password = StringField("Password", validators=[DataRequired()])
+    # is_admin = BooleanField("Admin")
+    # is_archived = BooleanField("Archived")
+    submit = SubmitField('Submit')
