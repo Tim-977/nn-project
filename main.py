@@ -10,6 +10,7 @@ from utils import *
 # TODO:
 #    ~ Fix frontend
 #    ~ Clear code snippets
+#    ~ Add admin_required
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '9@K#3jP!2dR$5sF6gV%1hL&8kM4nT7bY*0cX2zQ1wE4'
@@ -99,10 +100,7 @@ def edit_user(id):
             form.name.data = user.name
             form.email.data = user.email
             form.hashed_password.data = 'PASSWORD'
-            # form.is_admin.data = user.admin
-            # form.is_archived.data = user.archived
         else:
-            print('NO USER', form.errors)
             abort(404)
     if form.validate_on_submit():
         db_sess = db_session.create_session()
@@ -111,14 +109,26 @@ def edit_user(id):
             user.name = form.name.data
             user.email = form.email.data
             user.hashed_password = hashing.myhash(form.hashed_password.data)
-            # user.admin = form.is_admin.data
-            # user.archived = form.is_archived.data
             db_sess.commit()
             return redirect('/')
         else:
-            print('NO SUBMIT', form.errors)
             abort(404)
     return render_template('edit.html', title='User change', form=form)
+
+
+@app.route('/archiveuser/<int:id>', methods=['GET', 'POST'])
+@login_required
+def archive_user(id):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == id).first()
+    if user:
+        user.archived = True if not user.archived else False
+        db_sess.commit()
+    else:
+        print('NO USER', form.errors)
+        abort(404)
+    return redirect('/admin')
+
 
 
 @app.route('/admin')
