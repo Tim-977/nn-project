@@ -75,7 +75,6 @@ def reqister():
 def add_user():
     form = AddForm()
     if form.validate_on_submit():
-        print('validated on submit')
         db_sess = db_session.create_session()
         user = User()
         user.name = form.name.data
@@ -86,11 +85,10 @@ def add_user():
         db_sess.add(user)
         db_sess.commit()
         return redirect('/success')
-    print('passed through the function')
     return render_template('add.html', title='Add user', form=form)
 
 
-@app.route('/admin/<int:id>', methods=['GET', 'POST'])
+@app.route('/edituser/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_user(id):
     form = EditForm()
@@ -104,11 +102,12 @@ def edit_user(id):
             # form.is_admin.data = user.admin
             # form.is_archived.data = user.archived
         else:
+            print('NO USER', form.errors)
             abort(404)
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.id == id).first()
-        if news:
+        if user:
             user.name = form.name.data
             user.email = form.email.data
             user.hashed_password = hashing.myhash(form.hashed_password.data)
@@ -117,8 +116,9 @@ def edit_user(id):
             db_sess.commit()
             return redirect('/')
         else:
+            print('NO SUBMIT', form.errors)
             abort(404)
-    return render_template('admin.html', title='User change', form=form)
+    return render_template('edit.html', title='User change', form=form)
 
 
 @app.route('/admin')
