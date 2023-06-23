@@ -82,9 +82,9 @@ def add_user():
         user = User()
         user.name = form.name.data
         user.email = form.email.data
-        user.hashed_password = form.hashed_password.data
-        user.admin = form.admin.data
-        user.archived = form.archived.data
+        user.hashed_password = hashing.myhash(form.hashed_password.data)
+        user.admin = form.is_admin.data
+        user.archived = form.is_archived.data
         db_sess.add(user)
         db_sess.commit()
         return redirect('/success')
