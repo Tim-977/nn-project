@@ -29,6 +29,18 @@ def admin_required(f):
     return decorated_function
 
 
+def unarchived_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == current_user.id, User.name == current_user.name).first()
+        if user.archived:
+            return redirect('/archived')
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
 def password_check(password):
     if len(password) < 8:
         return 'Password is too short. It should be at least 8 characters long.'

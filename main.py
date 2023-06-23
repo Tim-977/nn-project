@@ -74,6 +74,7 @@ def reqister():
 @app.route('/adduser', methods=['GET', 'POST'])
 @login_required
 @admin_required
+@unarchived_required
 def add_user():
     form = AddForm()
     if form.validate_on_submit():
@@ -94,6 +95,7 @@ def add_user():
 
 @app.route('/success')
 @login_required
+@unarchived_required
 def success():
     return render_template('success.html')
 
@@ -101,6 +103,7 @@ def success():
 @app.route('/admin')
 @login_required
 @admin_required
+@unarchived_required
 def admin_page():
     db_sess = db_session.create_session()
     users = db_sess.query(User)
@@ -108,8 +111,16 @@ def admin_page():
 
 
 @app.route('/notadmin')
+@login_required
+@unarchived_required
 def notadmin_page():
     return render_template('notadmin.html')
+
+
+@app.route('/archived')
+@login_required
+def archived_page():
+    return render_template('archived.html')
 
 
 @app.route('/logout')
