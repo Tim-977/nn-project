@@ -89,6 +89,8 @@ def add_user():
 
 @app.route('/edituser/<int:id>', methods=['GET', 'POST'])
 @login_required
+@admin_required
+@unarchived_required
 def edit_user(id):
     form = EditForm()
     if request.method == "GET":
@@ -116,6 +118,8 @@ def edit_user(id):
 
 @app.route('/archiveuser/<int:id>', methods=['GET', 'POST'])
 @login_required
+@admin_required
+@unarchived_required
 def archive_user(id):
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == id).first()
@@ -130,6 +134,8 @@ def archive_user(id):
 
 @app.route('/adminuser/<int:id>', methods=['GET', 'POST'])
 @login_required
+@admin_required
+@unarchived_required
 def admin_user(id):
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == id).first()
